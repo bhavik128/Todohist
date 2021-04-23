@@ -1,0 +1,46 @@
+<%- include("partials/header") -%>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<nav>
+    <a href="/" class="logo">Todohist</a>
+    <ul>
+        <% const name = user.email.split('@')[0]%>
+        <li>Welcome, <%= name %> </li>
+        <li class="btn"><a href="/logout">LOGOUT</a></li>
+    </ul>
+</nav>
+
+<p class="listNamePara">Your lists:</p>
+<div class="dashboardDiv">
+    <%user.lists.forEach(list => { %>
+        <div class="box">
+            <div class="listBox random"><input type="hidden" name="listID" value="<%= list._id %>"></div>
+            <div class="boxName bin"><%= list.name %> <img src="/images/delete.png" id="bin" alt="delete bin"></div>
+        </div>
+   <% })%>
+    <div class="box">
+        <div class="createBox">+</div>
+        <div class="boxName">Create new</div>
+    </div>
+</div>
+
+<script>
+    const userID = '<%=user._id%>';
+</script>
+
+<script src="/js/createBoxAlert.js"></script>
+<script src="/js/randomSvg.js"></script>
+<script src="/js/deleteBoxAlert.js"></script>
+
+<script>
+    const listBox = document.querySelectorAll('.listBox');
+    listBox.forEach(listBox => {
+        listBox.addEventListener('click',async () => {
+            const listID = listBox.children.namedItem('listID').value;
+            location.assign("list/"+userID+"/"+listID);
+        })
+    });
+</script>
+
+
+<%- include("partials/footer") -%>

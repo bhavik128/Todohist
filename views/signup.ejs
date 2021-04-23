@@ -1,0 +1,47 @@
+<%- include("partials/header") -%>
+<nav>
+    <a href="/" class="logo">Todohist</a>
+</nav>
+<div class="inputContainer">
+    <h1>Sign up</h1>
+    <form>
+        <h5>Email:</h5>
+        <input type="text" placeholder="Email" name="email" autocomplete="off"/><br>
+        <div class="emailError error"></div>
+        <h5>Password:</h5>
+        <input type="password" placeholder="Password" name="password"/>
+        <div class="passwordError error"></div>
+        <br>
+        <button class="signUpBtn">Sign up</button>
+    </form>
+</div>
+
+<script>
+    const form = document.querySelector('form');
+    const emailError = document.querySelector('.emailError');
+    const passwordError = document.querySelector('.passwordError');
+    form.addEventListener('submit',async (e) => {
+        e.preventDefault();
+        emailError.textContent = "";
+        passwordError.textContent = "";
+
+        const email = form.email.value;
+        const password = form.password.value;
+        const res = await fetch('/signup',{
+            method:'post',
+            headers: {
+                'content-type':'application/json'
+            },
+            body: JSON.stringify({email,password})
+        });
+
+        const data = await res.json();
+        if(data.errors) {
+            emailError.textContent = data.errors.email.toString();
+            passwordError.textContent = data.errors.password.toString();
+        } else if(data.id) {
+            location.assign('/login');
+        }
+    });
+</script>
+<%- include("partials/footer") -%>

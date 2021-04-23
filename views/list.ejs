@@ -1,0 +1,58 @@
+<%- include("partials/header") -%>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<nav>
+    <a href="/" class="logo">Todohist</a>
+    <ul>
+        <% const name = user.email.split('@')[0]%>
+        <li>Welcome, <%= name %> </li>
+        <li class="btn"><a href="/logout">LOGOUT</a></li>
+    </ul>
+</nav>
+<p class="lNamePara">List: <%= listName %></p>
+<button class="clearCompletedTasksButton">Clear completed tasks</button>
+<div class="mainBox">
+    <div class="allListBox">
+        <%tasks.forEach(task => { %>
+            <div class="list">
+                <%if(task.checked) { %>
+                    <input type="checkbox" class="checkBox" name="checkbox" checked value="<%= task._id%>">
+                    <p class="strike"><%= task.task %></p>
+                <% } %>
+                <%if(!task.checked) { %>
+                    <input type="checkbox" class="checkBox" name="checkbox" value="<%= task._id%>">
+                    <p><%= task.task %></p>
+               <% } %>
+            </div>
+            <hr>
+       <% })%>
+    </div>
+    <div class="inputBox">
+        <form>
+            <input type="text" placeholder="Enter task" name="task" autocomplete="off">
+            <button>+</button>
+        </form>
+    </div>
+    <div class="enterTaskError errorColor"></div>
+</div>
+
+
+<script>
+    const userID = '<%= userID %>';
+    const listID = '<%= listID %>';
+</script>
+<script src="/js/enterTask.js"></script>
+<script src="/js/checkBoxClick.js"></script>
+<script>
+    const deleteTaskIDs = [];
+</script>
+<%tasks.forEach(task => { %>
+    <%if(task.checked){%>
+        <script>
+            deleteTaskIDs.push('<%= task._id %>');
+        </script>
+    <%}%>
+<%})%>
+<script src="/js/deleteCompletedTasks.js"></script>
+
+<%- include("partials/footer") -%>
